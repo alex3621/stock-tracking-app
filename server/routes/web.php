@@ -13,6 +13,12 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => 'user'], function () use ($router) {
+    $router->post('register', 'UserController@register');
+    // TODO: Include other user endpoints
+});
+
+
+$router->group(['prefix' => 'stock'], function () use ($router) {
+    // TODO: Include other stock endpoints here
 });

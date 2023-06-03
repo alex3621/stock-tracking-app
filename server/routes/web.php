@@ -13,9 +13,12 @@
 |
 */
 
+//calling API example (localhost:user/functionName)
+//$router->post/get('endpoint name', 'controllerFileName@functionName')
 $router->group(['prefix' => 'user'], function () use ($router) {
     $router->post('register', 'UserController@register');
     // TODO: Include other user endpoints
+    $router->post('login', 'UserController@login');
 });
 
 

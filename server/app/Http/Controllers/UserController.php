@@ -38,4 +38,26 @@ class UserController extends BaseController
             'password' => $password
         ]);
     }
+
+    public function login(Request $request)
+    {
+        $email = $request->input('email');
+        $password = $request->input('password');
+
+        try {
+            // check if email exists in the system
+            $userObj = DB::table('user')
+                ->where('email', '=', $email)
+                ->first();
+            if (!$userObj) {
+                return response()->json("User $email does not exist", 400);
+            }
+            if ($userObj->{'password'} != $password) {
+                return response()->json("Incorrect password", 400);
+            }
+        } catch (QueryException $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+        return response()->json("login successful", 200);
+    }
 }

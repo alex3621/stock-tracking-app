@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 class StockController extends BaseController
 {
     private static $storedData = null;
+
     public function fetchData()
     {
         try {
@@ -28,7 +29,7 @@ class StockController extends BaseController
                 // Store the data in the static variable
                 self::$storedData = $data;
             }
-
+            // delete this later
             return response()->json(['data' => self::$storedData]);
         } catch (\Exception $e) {
             // Handle the exception

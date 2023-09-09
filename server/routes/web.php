@@ -26,7 +26,7 @@ $router->group(['prefix' => 'user'], function () use ($router) {
 
 $router->group(['prefix' => 'stock'], function () use ($router) {
     // TODO: Include other stock endpoints here
-
+    $router->post('/searchStock/{symbol}', 'StockController@searchStock');
 
     //testing fetchData function
     $router->post('/fetchData', 'StockController@fetchData');

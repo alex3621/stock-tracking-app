@@ -40,3 +40,8 @@
 3. To run a migration, call `php artisan migrate`. (Migrate command automatically runs all the migrate files but it saves files already migrated inside the migration inside MYSQL so they won't be executed again)
 
 4. `php artisan migrate:rollback --step=1` will rollback the last migration that you did if needed.
+
+### Files for API endpoints
+
+1. app/Http/Controllers/<various controllers>
+2. /routes/web.php (Define routes)

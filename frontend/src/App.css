@@ -24,38 +24,6 @@ body {
   justify-content: center;
 }
 
-nav {
-  text-align: right;
-  width: 100%;
-  padding: 10px 0;
-}
-
-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-nav ul li {
-  display: inline-block;
-  margin-left: 20px; /* Adjust margin to push links to the right */
-}
-
-nav ul li:first-child {
-  margin-left: 0; /* Remove margin from the first link */
-}
-
-nav ul li a {
-  text-decoration: none;
-  color: #007bff;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-nav ul li a:hover {
-  color: #0056b3;
-}
-
 main {
   padding-top: 20px;
 }
@@ -67,4 +35,26 @@ main {
   width: 100%;
 }
 
-/* Rest of your CSS styles */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}

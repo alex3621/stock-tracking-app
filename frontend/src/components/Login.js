@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import $ from 'jquery'; 
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -10,11 +11,29 @@ function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Async function for submission handling
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    // Making an API call to php backend
+    try {
+      const response = await $.ajax({
+        url: 'http://localhost:8000/user/login', 
+        method: 'POST',
+        dataType: 'json',
+        data: formData, 
+      });
+
+      //debug
+      console.log('API Response:', response);
+    } catch (error) {
+      console.error('API Error:', error);
+    }
+  };
 
   return (
     <div className="container">
       <h2>Login</h2>
-      <form>
+      <form onSubmit={handleSubmit}> 
         <div className="form-group">
           <label>Email:</label>
           <input

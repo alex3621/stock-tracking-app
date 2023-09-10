@@ -15,7 +15,7 @@
 
 //calling API example (localhost:user/functionName)
 //$router->post/get('endpoint name', 'controllerFileName@functionName')
-$router->group(['prefix' => 'user'], function () use ($router) {
+$router->group(['prefix' => 'user', 'middleware' => 'cors'], function () use ($router) {
     //user can register for an account here
     $router->post('register', 'UserController@register');
 

@@ -33,7 +33,13 @@ function Login() {
       }
     } catch (error) {
       console.error('API Error:', error);
+      if(error.status === 401)
+      {
+        setMessage('Invalid login credentials');
+      }else{
       setMessage('An error occurred during login');
+      }
+
     }
   };
 

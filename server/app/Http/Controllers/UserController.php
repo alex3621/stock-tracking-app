@@ -50,14 +50,14 @@ class UserController extends BaseController
                 ->where('email', '=', $email)
                 ->first();
             if (!$userObj) {
-                return response()->json("User $email does not exist", 400);
+                return response()->json("noEmail", 200);
             }
             if ($userObj->{'password'} != $password) {
-                return response()->json("Incorrect password", 400);
+                return response()->json("wrongPassword", 200);
             }
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
-        return response()->json("login successful", 200);
+        return response()->json("success", 200);
     }
 }

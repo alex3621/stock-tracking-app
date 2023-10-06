@@ -7,6 +7,9 @@ function Login() {
     password: '',
   });
 
+  //message after logging
+  const [message, setMessage] = useState('');
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -23,10 +26,14 @@ function Login() {
         data: formData, 
       });
 
-      //debug
-      console.log('API Response:', response);
+      if (response === 'success') {
+        setMessage('Login successful');
+      } else if (response === 'wrongPassword' || response === 'noEmail'){
+        setMessage('Invalid login credentials');
+      }
     } catch (error) {
       console.error('API Error:', error);
+      setMessage('An error occurred during login');
     }
   };
 
@@ -56,8 +63,10 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
+      {message && <div className={message.includes('successful') ? 'success' : 'error'}>{message}</div>}
     </div>
   );
 }
 
 export default Login;
+

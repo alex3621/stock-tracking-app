@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 import $ from 'jquery'; 
 
 function Login() {
+  //navigate to home page after login
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -28,6 +32,7 @@ function Login() {
 
       if (response === 'success') {
         setMessage('Login successful');
+        navigate('/home'); // Redirect to the Home component
       } else if (response === 'wrongPassword' || response === 'noEmail'){
         setMessage('Invalid login credentials');
       }

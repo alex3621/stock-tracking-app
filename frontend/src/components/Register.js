@@ -1,20 +1,50 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import $ from 'jquery';
 
 function Register() {
+  const navigate = useNavigate(); // Define the navigate function
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
   });
 
+  const [message, setMessage] = useState('');
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await $.ajax({
+        url: 'http://localhost:8000/user/register',
+        method: 'POST',
+        dataType: 'json',
+        data: formData,
+      });
+
+      if (response.status === 200) {
+        setMessage('Registration successful');
+        navigate('/login');
+      } else {
+        setMessage('Registration failed');
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+      if (error.status === 400) {
+        setMessage('Invalid registration data');
+      } else {
+        setMessage('An error occurred during registration');
+      }
+    }
+  };
   return (
     <div className="container">
       <h2>Register</h2>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Name:</label>
           <input
@@ -47,6 +77,11 @@ function Register() {
         </div>
         <button type="submit">Register</button>
       </form>
+      {message && (
+        <div className={message.includes('successful') ? 'success' : 'error'}>
+          {message}
+        </div>
+      )}
     </div>
   );
 }

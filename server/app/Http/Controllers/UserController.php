@@ -29,13 +29,23 @@ class UserController extends BaseController
                     'email' => $email,
                     'password' => $password
                 ]);
+            //insert initial funds   
+            $user_id = DB::table('user')
+                ->where('email', '=', $email)
+                ->value('id');
+            DB::table('funds')
+                ->insert([
+                    'user_id' => $user_id,
+                    'amount' => 50000
+                ]);
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
 
         return response()->json([
             'email' => $email,
-            'password' => $password
+            'password' => $password,
+            'status' => 200
         ]);
     }
 

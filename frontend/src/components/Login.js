@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
-import $ from 'jquery'; 
+import { useNavigate } from 'react-router-dom';
+import $ from 'jquery';
 
-function Login() {
-  //navigate to home page after login
+function Login({ handleLogin }) {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -11,47 +10,43 @@ function Login() {
     password: '',
   });
 
-  //message after logging
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Async function for submission handling
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    // Making an API call to php backend
+    e.preventDefault();
     try {
       const response = await $.ajax({
-        url: 'http://localhost:8000/user/login', 
+        url: 'http://localhost:8000/user/login',
         method: 'POST',
         dataType: 'json',
-        data: formData, 
+        data: formData,
       });
 
       if (response === 'success') {
         setMessage('Login successful');
-        navigate('/home'); // Redirect to the Home component
-      } else if (response === 'wrongPassword' || response === 'noEmail'){
+        handleLogin(); // Call the handleLogin function from props
+        navigate('/home');
+      } else if (response === 'wrongPassword' || response === 'noEmail') {
         setMessage('Invalid login credentials');
       }
     } catch (error) {
       console.error('API Error:', error);
-      if(error.status === 401)
-      {
+      if (error.status === 401) {
         setMessage('Invalid login credentials');
-      }else{
-      setMessage('An error occurred during login');
+      } else {
+        setMessage('An error occurred during login');
       }
-
     }
   };
 
   return (
-    <div className="container">
+    <div className="mainBody">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}> 
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Email:</label>
           <input
@@ -74,10 +69,13 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
-      {message && <div className={message.includes('successful') ? 'success' : 'error'}>{message}</div>}
+      {message && (
+        <div className={message.includes('successful') ? 'success' : 'error'}>
+          {message}
+        </div>
+      )}
     </div>
   );
 }
 
 export default Login;
-

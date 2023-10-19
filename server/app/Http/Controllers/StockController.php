@@ -17,25 +17,29 @@ class StockController extends BaseController
     {
         try {
             $apiKey = env('API_KEY');
-            // Testing
             $url = 'https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&apiKey=' . $apiKey;
 
             if (is_null(self::$storedData)) {
                 $client = new \GuzzleHttp\Client();
-                // Make the API call and retrieve the stock data
                 $response = $client->get($url);
                 $data = json_decode($response->getBody(), true);
 
-                // Store the data in the static variable
-                self::$storedData = $data;
+                usort($data['results'], function ($a, $b) {
+                    return $b['c'] - $a['c'];
+                });
+
+                $topStocks = array_slice($data['results'], 0, 50);
+
+                self::$storedData = $topStocks;
             }
-            // delete this later
+
             return response()->json(['data' => self::$storedData]);
         } catch (\Exception $e) {
-            // Handle the exception
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
 
     public function dashboard(Request $request)
     {

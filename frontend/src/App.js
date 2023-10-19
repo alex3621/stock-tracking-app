@@ -18,30 +18,31 @@ function App() {
 
   return (
     <Router>
-<nav>
-  <ul>
+<nav className="custom-navbar">
+  <ul className="custom-navbar-list">
     {!isLoggedIn ? (
       <>
-        <li>
-          <Link to="/login">Login</Link>
+        <li className="custom-navbar-item">
+          <Link to="/login" className="custom-navbar-link">Login</Link>
         </li>
-        <li>
-          <Link to="/register">Register</Link>
+        <li className="custom-navbar-item">
+          <Link to="/register" className="custom-navbar-link">Register</Link>
         </li>
       </>
     ) : null}
     {isLoggedIn && (
       <>
-        <li>
-          <Link to="/home">Home</Link>
+        <li className="custom-navbar-item">
+          <Link to="/home" className="custom-navbar-link">Home</Link>
         </li>
-        <li>
-          <Link to="/" onClick={handleLogout}>Logout</Link>
+        <li className="custom-navbar-item">
+          <Link to="/" onClick={handleLogout} className="custom-navbar-link">Logout</Link>
         </li>
       </>
     )}
   </ul>
 </nav>
+
 
 
       <Routes>

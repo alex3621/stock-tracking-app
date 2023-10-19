@@ -32,7 +32,7 @@ nav {
 }
 
 main {
-  padding-top: 20px;
+  padding-top: 40px;
 }
 
 .form-container {
@@ -42,19 +42,22 @@ main {
   width: 100%;
 }
 
-ul {
+/* Custom styles for the navbar */
+.custom-navbar {
+  background-color: #333; /* Set your background color here */
+}
+
+.custom-navbar-list {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  background-color: #333;
 }
 
-li {
+.custom-navbar-item {
   float: left;
 }
 
-li a {
+.custom-navbar-link {
   display: block;
   color: white;
   text-align: center;
@@ -62,9 +65,10 @@ li a {
   text-decoration: none;
 }
 
-li a:hover {
+.custom-navbar-link:hover {
   background-color: #111;
 }
+
 
 .mainBody {
   display: flex;
@@ -72,5 +76,59 @@ li a:hover {
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 100vh; 
+  height: 100vh;
+  padding-top: 60px;
+  background-color: #fff;
+}
+
+
+/* Stock data styles */
+.stock-data {
+  background-color: #fff;
+  border: 1px solid #ccc; 
+  padding: 10px;
+  margin: 10px;
+  width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+  display: inline-block;
+  text-align: left; 
+}
+
+
+
+.stock-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+.stock-item {
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; 
+  background-color: aliceblue;
+}
+
+.stock-symbol {
+  font-weight: bold;
+  padding: 10px 20px; 
+}
+
+.stock-price {
+  padding: 10px 20px; 
+  color: green;
+  font-weight: bold;
+}
+
+.homeBody {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-height: calc(100vh - 46.5px); /* Adjust for the navbar height */
+  overflow-y: auto; 
+  background-color: #fff;
 }

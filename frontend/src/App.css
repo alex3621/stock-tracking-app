@@ -44,7 +44,7 @@ main {
 
 /* Custom styles for the navbar */
 .custom-navbar {
-  background-color: #333; /* Set your background color here */
+  background-color: #333;
 }
 
 .custom-navbar-list {
@@ -69,7 +69,6 @@ main {
   background-color: #111;
 }
 
-
 .mainBody {
   display: flex;
   flex-direction: column;
@@ -81,44 +80,42 @@ main {
   background-color: #fff;
 }
 
-
 /* Stock data styles */
 .stock-data {
   background-color: #fff;
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
   padding: 10px;
   margin: 10px;
   width: 300px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: inline-block;
-  text-align: left; 
+  text-align: left;
 }
-
-
 
 .stock-list {
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 }
+
 .stock-item {
   border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; 
+  width: 100%;
   background-color: aliceblue;
 }
 
 .stock-symbol {
   font-weight: bold;
-  padding: 10px 20px; 
+  padding: 10px 20px;
 }
 
 .stock-price {
-  padding: 10px 20px; 
+  padding: 10px 20px;
   color: green;
   font-weight: bold;
 }
@@ -128,7 +125,7 @@ main {
   align-items: center;
   justify-content: center;
   text-align: center;
-  max-height: calc(100vh - 46.5px); /* Adjust for the navbar height */
-  overflow-y: auto; 
+  max-height: calc(100vh - 46.5px);
+  overflow-y: auto;
   background-color: #fff;
 }

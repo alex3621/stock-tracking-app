@@ -28,7 +28,7 @@ function Login({ handleLogin }) {
 
       if (response === 'success') {
         setMessage('Login successful');
-        handleLogin(); // Call the handleLogin function from props
+        handleLogin(formData.email);  
         navigate('/home');
       } else if (response === 'wrongPassword' || response === 'noEmail') {
         setMessage('Invalid login credentials');

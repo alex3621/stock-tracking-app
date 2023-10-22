@@ -7,14 +7,20 @@ import Manage from './components/Manage'
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const storedEmail = localStorage.getItem('userEmail');
+  const [userEmail, setUserEmail] = useState(storedEmail || '');
+  const [isLoggedIn, setIsLoggedIn] = useState(!!storedEmail);
 
-  const handleLogin = () => {
+  const handleLogin = (email) => {
+    setUserEmail(email);
     setIsLoggedIn(true);
+    localStorage.setItem('userEmail', email);
   };
 
   const handleLogout = () => {
+    setUserEmail('');
     setIsLoggedIn(false);
+    localStorage.removeItem('userEmail');
   };
 
   return (
@@ -35,13 +41,16 @@ function App() {
       <>
         <li className="custom-navbar-item">
           <Link to="/home" className="custom-navbar-link">Home</Link>
-        </li>
+        </li> 
         <li className="custom-navbar-item">
           <Link to="/manage" className="custom-navbar-link">Manage</Link>
         </li>
         <li className="custom-navbar-item">
           <Link to="/" onClick={handleLogout} className="custom-navbar-link">Logout</Link>
         </li>
+        <li className="custom-navbar-item custom-navbar-link">
+      {userEmail}
+    </li>
       </>
     )}
   </ul>

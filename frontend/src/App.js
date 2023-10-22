@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
+import Manage from './components/Manage'
 import './App.css';
 
 function App() {
@@ -36,6 +37,9 @@ function App() {
           <Link to="/home" className="custom-navbar-link">Home</Link>
         </li>
         <li className="custom-navbar-item">
+          <Link to="/manage" className="custom-navbar-link">Manage</Link>
+        </li>
+        <li className="custom-navbar-item">
           <Link to="/" onClick={handleLogout} className="custom-navbar-link">Logout</Link>
         </li>
       </>
@@ -50,6 +54,7 @@ function App() {
         <Route path="/login" element={<Login handleLogin={handleLogin} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/Home" element={<Home />} />
+        <Route path="/manage" element={<Manage />} />
       </Routes>
     </Router>
   );

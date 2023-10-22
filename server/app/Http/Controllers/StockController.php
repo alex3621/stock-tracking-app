@@ -40,7 +40,6 @@ class StockController extends BaseController
     }
 
 
-
     public function dashboard(Request $request)
     {
     }

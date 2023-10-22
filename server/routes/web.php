@@ -28,14 +28,14 @@ $router->group(['prefix' => 'stock'], function () use ($router) {
     // TODO: Include other stock endpoints here
     $router->post('/searchStock/{symbol}', 'StockController@searchStock');
 
+    // Page for managing stocks, buying 
+    $router->post('buy', 'StockController@buy');
+
     //testing fetchData function
     $router->post('/fetchData', 'StockController@fetchData');
 
     // Main page when logged in, displays stocks user currently wants to keep track
     $router->post('dashboard', 'StockController@dashboard');
-
-    // Page for managing stocks, buying and selling
-    $router->post('manage', 'StockController@manage');
 
     // List of stocks that can be sorted 
     $router->post('stockList', 'StockController@stockList');

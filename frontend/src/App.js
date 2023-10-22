@@ -63,7 +63,7 @@ function App() {
         <Route path="/login" element={<Login handleLogin={handleLogin} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/Home" element={<Home />} />
-        <Route path="/manage" element={<Manage />} />
+        <Route path="/manage" element={<Manage userEmail={userEmail} />} />
       </Routes>
     </Router>
   );

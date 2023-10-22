@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-function Manage() {
+
+function Manage({ userEmail }) {
   const [stockData, setStockData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,8 +29,32 @@ function Manage() {
       });
   }, []);
 
-  const handleBuyStock = (symbol, quantity) => {
-    console.log(`Buying ${quantity} shares of ${symbol}`);
+  const handleBuyStock = async (symbol, quantity,price) => {
+    try {
+      const data = {
+        symbol,
+        quantity,
+        price,
+        userEmail,
+      };
+  
+      const response = await fetch('http://localhost:8000/stock/buy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Stock bought successfully:', responseData);
+      } else {
+        console.error('Server returned an error');
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
   };
 
 
@@ -52,7 +77,7 @@ function Manage() {
                       e.preventDefault();
                       const quantity = parseInt(e.target.quantity.value, 10);
                       if (!isNaN(quantity)) {
-                        handleBuyStock(stock.T, quantity);
+                        handleBuyStock(stock.T, quantity, stock.c);
                         e.target.reset();
                       }
                     }}

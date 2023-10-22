@@ -44,8 +44,9 @@ class StockController extends BaseController
     {
     }
 
-    public function manage(Request $request)
+    public function buy(Request $request)
     {
+        return response('success');
     }
 
     public function stockList(Request $request)

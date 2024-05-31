@@ -23,7 +23,7 @@ $router->group(['prefix' => 'user', 'middleware' => 'App\Http\Middleware\CorsMid
 });
 
 
-$router->group(['prefix' => 'stock'], function () use ($router) {
+$router->group(['prefix' => 'stock', 'middleware' => 'App\Http\Middleware\CorsMiddleware'], function () use ($router) {
     // TODO: Include other stock endpoints here
     $router->post('/searchStock/{symbol}', 'StockController@searchStock');
 

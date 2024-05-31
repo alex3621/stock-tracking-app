@@ -10,6 +10,7 @@ function Home() {
       headers: {
         'Content-Type': 'application/json',
       },
+      mode: 'cors',
     })
       .then((response) => {
         if (!response.ok) {

@@ -1,7 +1,6 @@
 <?php
 
 /** @var \Laravel\Lumen\Routing\Router $router */
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -15,7 +14,7 @@
 
 //calling API example (localhost:user/functionName)
 //$router->post/get('endpoint name', 'controllerFileName@functionName')
-$router->group(['prefix' => 'user', 'middleware' => 'cors'], function () use ($router) {
+$router->group(['prefix' => 'user', 'middleware' => 'App\Http\Middleware\CorsMiddleware'], function () use ($router) {
     //user can register for an account here
     $router->post('register', 'UserController@register');
 

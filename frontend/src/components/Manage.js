@@ -55,9 +55,11 @@ function Manage({ userId }) {
         return;
       }
   
-      const responseData = await response.json();
-      console.log('Stock bought successfully:', responseData);
+      // Update funds after successful purchase
       toast.success('Stock bought successfully!');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     } catch (error) {
       console.error('Fetch error:', error);
       toast.error('Fetch error: ' + error.message);

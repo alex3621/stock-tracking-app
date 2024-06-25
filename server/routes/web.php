@@ -20,6 +20,9 @@ $router->group(['prefix' => 'user', 'middleware' => 'App\Http\Middleware\CorsMid
 
     // login page
     $router->post('login', 'UserController@login');
+
+    // funds 
+    $router->get('funds', 'UserController@getFunds');
 });
 
 

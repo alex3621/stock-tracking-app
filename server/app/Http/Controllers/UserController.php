@@ -59,15 +59,34 @@ class UserController extends BaseController
             $userObj = DB::table('user')
                 ->where('email', '=', $email)
                 ->first();
+
             if (!$userObj) {
-                return response()->json("noEmail", 401);
+                return response()->json(['success' => false, 'message' => 'noEmail'], 401);
             }
-            if ($userObj->{'password'} != $password) {
-                return response()->json("wrongPassword", 401);
+
+            if ($userObj->password != $password) {
+                return response()->json(['success' => false, 'message' => 'wrongPassword'], 401);
             }
+
+            // If we reach here, login is successful
+            return response()->json([
+                'success' => true,
+                'user_id' => $userObj->id,
+                'message' => 'Login successful'
+            ], 200);
         } catch (QueryException $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 400);
         }
-        return response()->json("success", 200);
+    }
+
+    public function getFunds(Request $request)
+    {
+        $userId = $request->query('user_id');
+
+        $funds = DB::table('funds')
+            ->where('user_id', $userId)
+            ->value('amount');
+
+        return response()->json(['funds' => $funds ?? 0]);
     }
 }

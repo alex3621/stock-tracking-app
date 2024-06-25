@@ -26,11 +26,11 @@ function Login({ handleLogin }) {
         data: formData,
       });
 
-      if (response === 'success') {
+      if (response.success) {
         setMessage('Login successful');
-        handleLogin(formData.email);  
+        handleLogin(response.user_id, formData.email);  // Pass both user_id and email
         navigate('/home');
-      } else if (response === 'wrongPassword' || response === 'noEmail') {
+      } else if (response.message === 'wrongPassword' || response.message === 'noEmail') {
         setMessage('Invalid login credentials');
       }
     } catch (error) {

@@ -29,7 +29,7 @@ function Manage({ userEmail }) {
       });
   }, []);
 
-  const handleBuyStock = async (symbol, quantity,price) => {
+  const handleBuyStock = async (symbol, quantity, price) => {
     try {
       const data = {
         symbol,
@@ -46,11 +46,12 @@ function Manage({ userEmail }) {
         body: JSON.stringify(data),
       });
   
+      const responseData = await response.json();
+  
       if (response.ok) {
-        const responseData = await response.json();
         console.log('Stock bought successfully:', responseData);
       } else {
-        console.error('Server returned an error');
+        console.error('Server returned an error:', responseData.message || 'Unknown error');
       }
     } catch (error) {
       console.error('Fetch error:', error);

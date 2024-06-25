@@ -45,16 +45,23 @@ main {
 /* Custom styles for the navbar */
 .custom-navbar {
   background-color: #333;
+  display: flex; /* Add this line */
+  justify-content: space-between; /* Add this line */
+  align-items: center; /* Add this line */
+  padding: 0 1rem; /* Add some padding */
 }
 
 .custom-navbar-list {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  display: flex; /* Change from float to flex */
+  align-items: center; /* Add this line */
+  width: 100%; /* Add this line to make it full width */
 }
 
 .custom-navbar-item {
-  float: left;
+  margin-right: 1rem; /* Adjust spacing between items */
 }
 
 .custom-navbar-link {
@@ -67,6 +74,12 @@ main {
 
 .custom-navbar-link:hover {
   background-color: #111;
+}
+
+.custom-navbar-right {
+  margin-left: auto; /* Add this line to push it to the right */
+  display: flex; /* Add this line to align items */
+  align-items: center; /* Add this line */
 }
 
 .mainBody {

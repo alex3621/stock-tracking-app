@@ -80,7 +80,7 @@ class StockController extends BaseController
 
     public function buy(Request $request)
     {
-        return response('success');
+        return response()->json(['message' => 'success']);
     }
 
     public function stockList(Request $request)

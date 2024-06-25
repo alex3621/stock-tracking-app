@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
@@ -67,7 +68,7 @@ function App() {
           )}
         </ul>
       </nav>
-
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 
 
       <Routes>
@@ -75,7 +76,7 @@ function App() {
         <Route path="/login" element={<Login handleLogin={handleLogin} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/Home" element={<Home />} />
-        <Route path="/manage" element={<Manage userEmail={userEmail} />} />
+        <Route path="/manage" element={<Manage userId={userId} />} />
       </Routes>
     </Router>
   );

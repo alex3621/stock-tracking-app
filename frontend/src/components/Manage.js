@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
-function Manage({ userEmail }) {
+function Manage({ userId }) {
   const [stockData, setStockData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +37,7 @@ function Manage({ userEmail }) {
         symbol,
         quantity,
         price,
-        userEmail,
+        userId,
       };
   
       const response = await fetch('http://localhost:8000/stock/buy', {
@@ -46,17 +48,23 @@ function Manage({ userEmail }) {
         body: JSON.stringify(data),
       });
   
-      const responseData = await response.json();
-  
-      if (response.ok) {
-        console.log('Stock bought successfully:', responseData);
-      } else {
-        console.error('Server returned an error:', responseData.message || 'Unknown error');
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server returned an error:', errorText);
+        toast.error(errorText || 'Unknown error');
+        return;
       }
+  
+      const responseData = await response.json();
+      console.log('Stock bought successfully:', responseData);
+      toast.success('Stock bought successfully!');
     } catch (error) {
       console.error('Fetch error:', error);
+      toast.error('Fetch error: ' + error.message);
     }
   };
+  
+  
 
 
   return (

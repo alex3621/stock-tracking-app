@@ -80,8 +80,50 @@ class StockController extends BaseController
 
     public function buy(Request $request)
     {
-        return response()->json(['message' => 'success']);
+        $userId = $request->input('userId');
+        $symbol = $request->input('symbol');
+        $quantity = $request->input('quantity');
+        $price = $request->input('price');
+
+        $totalCost = $quantity * $price;
+
+        $userFunds = DB::table('funds')
+            ->where('user_id', $userId)
+            ->first();
+
+        if (!$userFunds) {
+            return response()->json(['message' => 'User funds not found'], 404);
+        }
+
+        if ($userFunds->amount < $totalCost) {
+            return response()->json(['message' => 'Insufficient funds'], 400);
+        }
+
+        DB::table('funds')
+            ->where('user_id', $userId)
+            ->update(['amount' => $userFunds->amount - $totalCost]);
+
+        $existingStock = DB::table('stocks')
+            ->where('user_id', $userId)
+            ->where('symbol', $symbol)
+            ->first();
+
+        if ($existingStock) {
+            DB::table('stocks')
+                ->where('user_id', $userId)
+                ->where('symbol', $symbol)
+                ->update(['quantity' => $existingStock->quantity + $quantity]);
+        } else {
+            DB::table('stocks')->insert([
+                'user_id' => $userId,
+                'symbol' => $symbol,
+                'quantity' => $quantity
+            ]);
+        }
+
+        return response()->json(['message' => 'Stock bought successfully']);
     }
+
 
     public function stockList(Request $request)
     {

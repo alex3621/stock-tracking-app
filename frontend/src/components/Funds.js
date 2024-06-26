@@ -10,7 +10,6 @@ function Funds({ userId }) {
       const response = await fetch(`http://localhost:8000/user/funds?user_id=${userId}`);
       if (response.ok) {
         const data = await response.json();
-        // Ensure funds is a number
         const fundsAmount = parseFloat(data.funds);
         setFunds(isNaN(fundsAmount) ? 0 : fundsAmount);
       } else {

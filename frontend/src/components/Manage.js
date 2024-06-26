@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 function Manage({ userId }) {
   const [stockData, setStockData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:8000/stock/fetchData', {
@@ -21,7 +21,7 @@ function Manage({ userId }) {
         return response.json();
       })
       .then((data) => {
-        console.log(data.data)
+        console.log(data.data);
         setStockData(data.data);
         setLoading(false);
       })
@@ -39,7 +39,7 @@ function Manage({ userId }) {
         price,
         userId,
       };
-  
+
       const response = await fetch('http://localhost:8000/stock/buy', {
         method: 'POST',
         headers: {
@@ -47,14 +47,14 @@ function Manage({ userId }) {
         },
         body: JSON.stringify(data),
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Server returned an error:', errorText);
         toast.error(errorText || 'Unknown error');
         return;
       }
-  
+
       // Update funds after successful purchase
       toast.success('Stock bought successfully!');
       setTimeout(() => {
@@ -65,13 +65,35 @@ function Manage({ userId }) {
       toast.error('Fetch error: ' + error.message);
     }
   };
-  
-  
 
+  // Filtered stock data based on search query
+  const filteredStockData = stockData.filter(stock =>
+    stock.T.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className=" homeBody">
+    <div className="homeBody">
       <h2 className="mb-4">Welcome to the Stock Management Page</h2>
+      
+      <h2 className="mb-4">Buy Stocks</h2>
+      <div className="row justify-content-center mb-3">
+        <div className="col-md-12"> {/* Adjusted width of the search input */}
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by symbol"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Static content */}
+      <div className="static-content">
+        <p>This is static content that should remain fixed.</p>
+      </div>
+
+      {/* Conditional rendering of stock list */}
       {loading ? (
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
@@ -79,11 +101,10 @@ function Manage({ userId }) {
           </div>
         </div>
       ) : (
-        <>
-          <h2 className="mb-4">Stock Data</h2>
-          {stockData.length > 0 ? (
+        <div className="dynamic-content">
+          {filteredStockData.length > 0 ? (
             <div className="list-group">
-              {stockData.map((stock) => (
+              {filteredStockData.map((stock) => (
                 <div
                   className="list-group-item list-group-item-action"
                   key={stock.T}
@@ -122,8 +143,10 @@ function Manage({ userId }) {
           ) : (
             <p>No stock data available.</p>
           )}
-        </>
+        </div>
       )}
+      
+      <ToastContainer />
     </div>
   );
 }

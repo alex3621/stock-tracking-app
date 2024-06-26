@@ -37,65 +37,67 @@ function Home({ userId }) {
   };
 
   return (
-    <Container className="mt-5">
-      <Row className="mb-4">
-        <Col>
-          <Card className="bg-primary text-white">
-            <Card.Body>
-              <Card.Title>Total Assets</Card.Title>
-              <Card.Text className="display-4">{formatCurrency(totalAssets)}</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col md={6}>
-          <Card>
-            <Card.Body>
-              <Card.Title>Available Funds</Card.Title>
-              <Card.Text className="h3">{formatCurrency(availableFunds)}</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={6}>
-          <Card>
-            <Card.Body>
-              <Card.Title>Invested Amount</Card.Title>
-              <Card.Text className="h3">{formatCurrency(totalAssets - availableFunds)}</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Card>
-            <Card.Body>
-              <Card.Title>Your Stocks</Card.Title>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Symbol</th>
-                    <th>Quantity</th>
-                    <th>Current Price</th>
-                    <th>Total Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stocks.map((stock) => (
-                    <tr key={stock.symbol}>
-                      <td>{stock.symbol}</td>
-                      <td>{stock.quantity}</td>
-                      <td>{formatCurrency(parseFloat(stock.currentPrice))}</td>
-                      <td>{formatCurrency(stock.quantity * parseFloat(stock.currentPrice))}</td>
+    <div className="flex-container"> {/* Add a wrapper div with flex-container class */}
+      <Container>
+        <Row className="mb-4">
+          <Col>
+            <Card className="bg-primary text-white">
+              <Card.Body>
+                <Card.Title>Total Assets</Card.Title>
+                <Card.Text className="display-4">{formatCurrency(totalAssets)}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col md={6}>
+            <Card>
+              <Card.Body>
+                <Card.Title>Available Funds</Card.Title>
+                <Card.Text className="h3">{formatCurrency(availableFunds)}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={6}>
+            <Card>
+              <Card.Body>
+                <Card.Title>Invested Amount</Card.Title>
+                <Card.Text className="h3">{formatCurrency(totalAssets - availableFunds)}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Card>
+              <Card.Body>
+                <Card.Title>Your Stocks</Card.Title>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Symbol</th>
+                      <th>Quantity</th>
+                      <th>Current Price</th>
+                      <th>Total Value</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+                  </thead>
+                  <tbody>
+                    {stocks.map((stock) => (
+                      <tr key={stock.symbol}>
+                        <td>{stock.symbol}</td>
+                        <td>{stock.quantity}</td>
+                        <td>{formatCurrency(parseFloat(stock.currentPrice))}</td>
+                        <td>{formatCurrency(stock.quantity * parseFloat(stock.currentPrice))}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
 

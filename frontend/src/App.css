@@ -141,4 +141,5 @@ main {
   max-height: calc(100vh - 46.5px);
   overflow-y: auto;
   background-color: #fff;
+  margin-top: 60px;
 }

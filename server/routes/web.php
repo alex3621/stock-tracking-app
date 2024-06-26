@@ -40,5 +40,5 @@ $router->group(['prefix' => 'stock', 'middleware' => 'App\Http\Middleware\CorsMi
     $router->post('dashboard', 'StockController@dashboard');
 
     // List of stocks that can be sorted 
-    $router->post('stockList', 'StockController@stockList');
+    $router->get('stockList', 'StockController@stockList');
 });

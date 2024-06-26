@@ -1,57 +1,101 @@
 import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Card, Table } from 'react-bootstrap';
 
-function Home() {
-  const [stockData, setStockData] = useState([]);
-  const [loading, setLoading] = useState(true);
+function Home({ userId }) {
+  const [totalAssets, setTotalAssets] = useState(0);
+  const [stocks, setStocks] = useState([]);
+  const [availableFunds, setAvailableFunds] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:8000/stock/fetchData', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      mode: 'cors',
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data.data)
-        setStockData(data.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('API Error:', error);
-        setLoading(false);
-      });
-  }, []);
+    const fetchData = async () => {
+      try {
+        // Fetch available funds
+        const fundsResponse = await fetch(`http://localhost:8000/user/funds?user_id=${userId}`);
+        const fundsData = await fundsResponse.json();
+        setAvailableFunds(parseFloat(fundsData.funds) || 0);
+
+        // Fetch stocks owned by the user
+        const stocksResponse = await fetch(`http://localhost:8000/stock/stockList?user_id=${userId}`);
+        const stocksData = await stocksResponse.json();
+        setStocks(stocksData.stocks);
+        console.log(stocksData);
+
+        // Calculate total assets
+        const stocksValue = stocksData.stocks.reduce((total, stock) => 
+          total + (stock.quantity * parseFloat(stock.currentPrice)), 0);
+        setTotalAssets(stocksValue + parseFloat(fundsData.funds) || 0);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+  };
 
   return (
-    <div className="homeBody">
-      <h2>Welcome to the Home Page</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <h2>Stock Data</h2>
-          {stockData.length > 0 ? (
-            <ul className="stock-list">
-              {stockData.map((stock) => (
-                <li className="stock-item" key={stock.T}>
-                  <p className="stock-symbol">Symbol: {stock.T}</p>
-                  <p className="stock-price">Price: {stock.c}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No stock data available.</p>
-          )}
-        </>
-      )}
-    </div>
+    <Container className="mt-5">
+      <Row className="mb-4">
+        <Col>
+          <Card className="bg-primary text-white">
+            <Card.Body>
+              <Card.Title>Total Assets</Card.Title>
+              <Card.Text className="display-4">{formatCurrency(totalAssets)}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col md={6}>
+          <Card>
+            <Card.Body>
+              <Card.Title>Available Funds</Card.Title>
+              <Card.Text className="h3">{formatCurrency(availableFunds)}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={6}>
+          <Card>
+            <Card.Body>
+              <Card.Title>Invested Amount</Card.Title>
+              <Card.Text className="h3">{formatCurrency(totalAssets - availableFunds)}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Card>
+            <Card.Body>
+              <Card.Title>Your Stocks</Card.Title>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Symbol</th>
+                    <th>Quantity</th>
+                    <th>Current Price</th>
+                    <th>Total Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stocks.map((stock) => (
+                    <tr key={stock.symbol}>
+                      <td>{stock.symbol}</td>
+                      <td>{stock.quantity}</td>
+                      <td>{formatCurrency(parseFloat(stock.currentPrice))}</td>
+                      <td>{formatCurrency(stock.quantity * parseFloat(stock.currentPrice))}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

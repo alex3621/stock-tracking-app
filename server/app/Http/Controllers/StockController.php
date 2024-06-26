@@ -125,7 +125,51 @@ class StockController extends BaseController
     }
 
 
+
     public function stockList(Request $request)
     {
+        $userId = $request->query('user_id');
+
+        if (!$userId) {
+            return response()->json(['error' => 'User ID is required'], 400);
+        }
+
+        try {
+            $userStocks = DB::table('stocks')
+                ->where('user_id', $userId)
+                ->get();
+            // get the cached stokc prices
+            $cacheKey = 'polygon_data';
+            if (!Cache::has($cacheKey)) {
+                // If cache is empty, fetch new data
+                $this->fetchData();
+            }
+            $cachedStocks = Cache::get($cacheKey);
+
+            // Create a lookup array for quick price access
+            $stockPrices = [];
+            foreach ($cachedStocks as $stock) {
+                $stockPrices[$stock['T']] = $stock['c']; // Assuming 'T' is the ticker symbol and 'c' is the closing price
+            }
+
+            // Prepare the result array
+            $stocks = [];
+
+            foreach ($userStocks as $stock) {
+                $currentPrice = $stockPrices[$stock->symbol] ?? 0;
+
+                $stocks[] = [
+                    'symbol' => $stock->symbol,
+                    'quantity' => $stock->quantity,
+                    'currentPrice' => $currentPrice,
+                ];
+            }
+
+            return response()->json(['stocks' => $stocks]);
+        } catch (QueryException $e) {
+            return response()->json(['error' => 'Database error: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
     }
 }

@@ -70,20 +70,30 @@ function Manage({ userId }) {
 
 
   return (
-    <div className="homeBody">
-      <h2>Welcome to the Stock Management Page</h2>
+    <div className=" homeBody">
+      <h2 className="mb-4">Welcome to the Stock Management Page</h2>
       {loading ? (
-        <p>Loading...</p>
+        <div className="d-flex justify-content-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
       ) : (
         <>
-          <h2>Stock Data</h2>
+          <h2 className="mb-4">Stock Data</h2>
           {stockData.length > 0 ? (
-            <ul className="stock-list">
+            <div className="list-group">
               {stockData.map((stock) => (
-                <li className="stock-item" key={stock.T}>
-                  <p className="stock-symbol">Symbol: {stock.T}</p>
-                  <p className="stock-price">Price: {stock.c}</p>
+                <div
+                  className="list-group-item list-group-item-action"
+                  key={stock.T}
+                >
+                  <div className="d-flex w-100 justify-content-between">
+                    <h5 className="mb-1">{stock.T}</h5>
+                    <small className="text-muted">Price: ${stock.c}</small>
+                  </div>
                   <form
+                    className="mt-2"
                     onSubmit={(e) => {
                       e.preventDefault();
                       const quantity = parseInt(e.target.quantity.value, 10);
@@ -93,17 +103,22 @@ function Manage({ userId }) {
                       }
                     }}
                   >
-                    <input
-                      type="number"
-                      name="quantity"
-                      placeholder="Quantity"
-                      required
-                    />
-                    <button type="submit">Buy</button>
+                    <div className="input-group">
+                      <input
+                        type="number"
+                        name="quantity"
+                        className="form-control"
+                        placeholder="Quantity"
+                        required
+                      />
+                      <button type="submit" className="btn btn-primary">
+                        Buy
+                      </button>
+                    </div>
                   </form>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           ) : (
             <p>No stock data available.</p>
           )}

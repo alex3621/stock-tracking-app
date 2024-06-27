@@ -28,7 +28,7 @@ function Login({ handleLogin }) {
 
       if (response.success) {
         setMessage('Login successful');
-        handleLogin(response.user_id, formData.email);  // Pass both user_id and email
+        handleLogin(response.user_id, formData.email);
         navigate('/home');
       } else if (response.message === 'wrongPassword' || response.message === 'noEmail') {
         setMessage('Invalid login credentials');
@@ -44,36 +44,52 @@ function Login({ handleLogin }) {
   };
 
   return (
-    <div className="mainBody">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+    <div className="auth-wrapper">
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-md-6 col-lg-4">
+          <div className="card shadow">
+            <div className="card-body">
+              <h2 className="card-title text-center mb-4">Login</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="d-grid">
+                  <button type="submit" className="btn btn-primary">Login</button>
+                </div>
+              </form>
+              {message && (
+                <div className={`alert mt-3 ${message.includes('successful') ? 'alert-success' : 'alert-danger'}`} role="alert">
+                  {message}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
         </div>
-        <button type="submit">Login</button>
-      </form>
-      {message && (
-        <div className={message.includes('successful') ? 'success' : 'error'}>
-          {message}
-        </div>
-      )}
+      </div>
     </div>
   );
 }

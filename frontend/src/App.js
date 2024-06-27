@@ -34,7 +34,7 @@ function App() {
 
   return (
     <Router>
-      <nav className="custom-navbar">
+      <div className="custom-navbar">
         <ul className="custom-navbar-list">
           {!isLoggedIn ? (
             <>
@@ -68,7 +68,7 @@ function App() {
             </>
           )}
         </ul>
-      </nav>
+      </div>
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
 
 

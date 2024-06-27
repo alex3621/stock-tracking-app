@@ -62,7 +62,7 @@ class StockController extends BaseController
                 usort($data['results'], function ($a, $b) {
                     return $b['c'] - $a['c'];
                 });
-                $topStocks = array_slice($data['results'], 0, 50);
+                $topStocks = array_slice($data['results'], 0, 120);
 
                 // Cache data
                 Cache::put($cacheKey, $topStocks, Date::now()->addMinutes(60)); // Cache for 60 minutes

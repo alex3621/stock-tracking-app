@@ -6,6 +6,8 @@ function Manage({ userId }) {
   const [stockData, setStockData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const stocksPerPage = 30;
 
   useEffect(() => {
     fetch('http://localhost:8000/stock/fetchData', {
@@ -71,13 +73,34 @@ function Manage({ userId }) {
     stock.T.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Pagination logic
+  const indexOfLastStock = currentPage * stocksPerPage;
+  const indexOfFirstStock = indexOfLastStock - stocksPerPage;
+  const currentStocks = filteredStockData.slice(indexOfFirstStock, indexOfLastStock);
+
+  const totalPages = Math.ceil(filteredStockData.length / stocksPerPage);
+
+  const scrollToTop = () => {
+    console.log('Scrolling to top...');
+    document.querySelector('.homeBody').scrollTo(0, 0);
+  };
+
+  const paginate = (pageNumber) => {
+    console.log('Paginate called with page number:', pageNumber);
+    setCurrentPage(pageNumber);
+  };
+
+  useEffect(() => {
+    scrollToTop();
+  }, [currentPage]);
+
   return (
-    <div className="homeBody">
+    <div  className="homeBody">
       <h2 className="mb-4">Welcome to the Stock Management Page</h2>
       
       <h2 className="mb-4">Buy Stocks</h2>
       <div className="row justify-content-center mb-3">
-        <div className="col-md-12"> {/* Adjusted width of the search input */}
+        <div className="col-md-12">
           <input
             type="text"
             className="form-control"
@@ -88,12 +111,6 @@ function Manage({ userId }) {
         </div>
       </div>
 
-      {/* Static content */}
-      <div className="static-content">
-        <p>This is static content that should remain fixed.</p>
-      </div>
-
-      {/* Conditional rendering of stock list */}
       {loading ? (
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
@@ -102,9 +119,9 @@ function Manage({ userId }) {
         </div>
       ) : (
         <div className="dynamic-content">
-          {filteredStockData.length > 0 ? (
+          {currentStocks.length > 0 ? (
             <div className="list-group">
-              {filteredStockData.map((stock) => (
+              {currentStocks.map((stock) => (
                 <div
                   className="list-group-item list-group-item-action"
                   key={stock.T}
@@ -144,6 +161,24 @@ function Manage({ userId }) {
             <p>No stock data available.</p>
           )}
         </div>
+      )}
+      
+      {!loading && filteredStockData.length > stocksPerPage && (
+        <nav aria-label="Stock pagination" className="mt-4">
+          <ul className="pagination justify-content-center">
+            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+              <button className="page-link" onClick={() => paginate(currentPage - 1)}>Previous</button>
+            </li>
+            {[...Array(totalPages).keys()].map(number => (
+              <li key={number + 1} className={`page-item ${currentPage === number + 1 ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => paginate(number + 1)}>{number + 1}</button>
+              </li>
+            ))}
+            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+              <button className="page-link" onClick={() => paginate(currentPage + 1)}>Next</button>
+            </li>
+          </ul>
+        </nav>
       )}
       
       <ToastContainer />

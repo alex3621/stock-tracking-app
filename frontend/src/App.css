@@ -17,11 +17,7 @@ body {
 }
 
 nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: #333;
-  z-index: 1;
+
 }
 
 .App {
@@ -55,6 +51,11 @@ main {
   justify-content: space-between; 
   align-items: center; 
   padding: 0 1rem; 
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #333;
+  z-index: 1;
 }
 
 .custom-navbar-list {
@@ -149,7 +150,7 @@ main {
   overflow-y: auto;
   background-color: #fff;
   margin-top: 60px;
-  z-index: 0.9;
+  z-index: -1;
   padding: 20px; 
 }
 
@@ -164,5 +165,3 @@ main {
 .form-control {
   width: 100%; 
 }
-
-

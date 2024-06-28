@@ -7,6 +7,7 @@ import Register from './components/Register';
 import Home from './components/Home';
 import Manage from './components/Manage'
 import Funds from './components/Funds';
+import Sell from './components/Sell';
 import './App.css';
 
 function App() {
@@ -54,6 +55,9 @@ function App() {
               <li className="custom-navbar-item">
                 <Link to="/manage" className="custom-navbar-link">Manage</Link>
               </li>
+              <li className="custom-navbar-item">
+                <Link to="/sell" className="custom-navbar-link">Sell</Link>
+              </li>
               <li className="custom-navbar-item custom-navbar-link">
                 <Funds userId={userId} />
               </li>
@@ -78,6 +82,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/Home" element={<Home userId={userId}/>} />
         <Route path="/manage" element={<Manage userId={userId} />} />
+        <Route path="/sell" element={<Sell userId={userId} />} />
       </Routes>
     </Router>
   );

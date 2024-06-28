@@ -172,4 +172,101 @@ class StockController extends BaseController
             return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
+
+    public function sell(Request $request)
+    {
+        // Validate the request
+        $this->validate($request, [
+            'user_id' => 'required|integer',
+            'symbol' => 'required|string',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        $userId = $request->input('user_id');
+        $symbol = $request->input('symbol');
+        $quantityToSell = $request->input('quantity');
+
+        // Start a database transaction
+        DB::beginTransaction();
+
+        try {
+            // Get the current stock holding
+            $stock = DB::table('stocks')
+                ->where('user_id', $userId)
+                ->where('symbol', $symbol)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$stock || $stock->quantity < $quantityToSell) {
+                throw new \Exception('Insufficient stocks to sell');
+            }
+
+            // Get the current stock price (you need to implement this method)
+            $currentPrice = $this->getCurrentStockPrice($symbol);
+
+            // Calculate the total sale amount
+            $saleAmount = $quantityToSell * $currentPrice;
+
+            // Update the stock quantity
+            $newQuantity = $stock->quantity - $quantityToSell;
+            if ($newQuantity == 0) {
+                DB::table('stocks')
+                    ->where('user_id', $userId)
+                    ->where('symbol', $symbol)
+                    ->delete();
+            } else {
+                DB::table('stocks')
+                    ->where('user_id', $userId)
+                    ->where('symbol', $symbol)
+                    ->update(['quantity' => $newQuantity]);
+            }
+
+            // Update the user's funds
+            $fund = DB::table('funds')
+                ->where('user_id', $userId)
+                ->lockForUpdate()
+                ->first();
+            if (!$fund) {
+                throw new \Exception('User fund not found');
+            }
+            DB::table('funds')
+                ->where('user_id', $userId)
+                ->update(['amount' => $fund->amount + $saleAmount]);
+
+            // Commit the transaction
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Stock sold successfully',
+                'sale_amount' => $saleAmount,
+                'new_fund_balance' => $fund->amount + $saleAmount
+            ]);
+        } catch (\Exception $e) {
+            // Rollback the transaction in case of any error
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    //for selling stocks
+    public function getCurrentStockPrice($symbol)
+    {
+        $cacheKey = 'polygon_data';
+        if (Cache::has($cacheKey)) {
+            $cachedStocks = Cache::get($cacheKey);
+
+            foreach ($cachedStocks as $stock) {
+                if ($stock['T'] === $symbol) {
+                    return $stock['c'];
+                }
+            }
+        }
+
+        throw new \Exception('Stock price not found in cache');
+    }
 }

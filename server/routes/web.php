@@ -36,6 +36,9 @@ $router->group(['prefix' => 'stock', 'middleware' => 'App\Http\Middleware\CorsMi
     // Page for managing stocks, buying 
     $router->post('buy', 'StockController@buy');
 
+    // Route for selling
+    $router->post('sell', 'StockController@sell');
+
     //testing fetchData function
     $router->post('/fetchData', 'StockController@fetchData');
 

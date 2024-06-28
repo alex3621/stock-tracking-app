@@ -5,6 +5,7 @@ function Home({ userId }) {
   const [totalAssets, setTotalAssets] = useState(0);
   const [stocks, setStocks] = useState([]);
   const [availableFunds, setAvailableFunds] = useState(0);
+  const [baseFund, setBaseFund] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -14,11 +15,15 @@ function Home({ userId }) {
         const fundsData = await fundsResponse.json();
         setAvailableFunds(parseFloat(fundsData.funds) || 0);
 
+        // Fetch base fund
+        const baseFundResponse = await fetch(`http://localhost:8000/user/base_fund?user_id=${userId}`);
+        const baseFundData = await baseFundResponse.json();
+        setBaseFund(parseFloat(baseFundData.base_fund) || 0);
+
         // Fetch stocks owned by the user
         const stocksResponse = await fetch(`http://localhost:8000/stock/stockList?user_id=${userId}`);
         const stocksData = await stocksResponse.json();
         setStocks(stocksData.stocks);
-        console.log(stocksData);
 
         // Calculate total assets
         const stocksValue = stocksData.stocks.reduce((total, stock) => 
@@ -36,15 +41,25 @@ function Home({ userId }) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
   };
 
+  const formatPercentage = (value) => {
+    return new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2 }).format(value);
+  };
+
+  const difference = totalAssets - baseFund;
+  const percentageChange = baseFund !== 0 ? (difference / baseFund) : 0;
+
   return (
-    <div className="flex-container"> {/* Add a wrapper div with flex-container class */}
+    <div className="flex-container">
       <Container>
         <Row className="mb-4">
           <Col>
-            <Card className="bg-primary text-white">
+            <Card className="bg-info text-white">
               <Card.Body>
                 <Card.Title>Total Assets</Card.Title>
                 <Card.Text className="display-4">{formatCurrency(totalAssets)}</Card.Text>
+                <Card.Text className={difference >= 0 ? 'text-success' : 'text-danger'}>
+          {difference >= 0 ? 'Gain' : 'Loss'}: {formatCurrency(Math.abs(difference))} ({formatPercentage(percentageChange)})
+        </Card.Text>
               </Card.Body>
             </Card>
           </Col>

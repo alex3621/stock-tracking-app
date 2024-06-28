@@ -36,7 +36,8 @@ class UserController extends BaseController
             DB::table('funds')
                 ->insert([
                     'user_id' => $user_id,
-                    'amount' => 50000
+                    'amount' => 50000,
+                    'base_fund' => 50000,
                 ]);
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], 400);
@@ -88,5 +89,16 @@ class UserController extends BaseController
             ->value('amount');
 
         return response()->json(['funds' => $funds ?? 0]);
+    }
+
+    public function getBaseFund(Request $request)
+    {
+        $userId = $request->query('user_id');
+
+        $funds = DB::table('funds')
+            ->where('user_id', $userId)
+            ->value('base_fund');
+
+        return response()->json(['base_fund' => $funds ?? 0]);
     }
 }

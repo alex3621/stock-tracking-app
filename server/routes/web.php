@@ -26,6 +26,9 @@ $router->group(['prefix' => 'user', 'middleware' => 'App\Http\Middleware\CorsMid
 
     //base fund for calculating asset
     $router->get('base_fund', 'UserController@getBaseFund');
+
+    //Adds fund to user current funds
+    $router->post('addFund', 'UserController@addFund');
 });
 
 

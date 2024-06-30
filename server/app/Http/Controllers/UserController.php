@@ -101,4 +101,37 @@ class UserController extends BaseController
 
         return response()->json(['base_fund' => $funds ?? 0]);
     }
+
+    public function addFund(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required|integer',
+            'amount' => 'required|numeric|min:0'
+        ]);
+
+        $userId = $request->input('user_id');
+        $amount = $request->input('amount');
+
+        try {
+            DB::beginTransaction();
+            $fund = DB::table('funds')->where('user_id', $userId)->lockForUpdate()->first();
+
+            if ($fund) {
+                DB::table('funds')
+                    ->where('user_id', $userId)
+                    ->update([
+                        'amount' => $fund->amount + $amount,
+                        'base_fund' => $fund->base_fund + $amount,
+                    ]);
+            }
+
+            DB::commit();
+
+            return response()->json(['message' => 'Funds added successfully'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Failed to add funds', 'error' => $e->getMessage()], 500);
+        }
+    }
 }

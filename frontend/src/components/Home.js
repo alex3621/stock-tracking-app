@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Table } from 'react-bootstrap';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
+ChartJS.register(ArcElement, Tooltip, Legend);
 function Home({ userId }) {
   const [totalAssets, setTotalAssets] = useState(0);
   const [stocks, setStocks] = useState([]);
   const [availableFunds, setAvailableFunds] = useState(0);
   const [baseFund, setBaseFund] = useState(0);
+  const pieChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,8 +55,28 @@ function Home({ userId }) {
   const difference = totalAssets - baseFund;
   const percentageChange = baseFund !== 0 ? (difference / baseFund) : 0;
 
+//pie chart logic
+const preparePieChartData = () => {
+    const labels = stocks.map(stock => stock.symbol);
+    const data = stocks.map(stock => stock.quantity * parseFloat(stock.currentPrice));
+    return {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: [
+            '#4E79A7', '#F28E2B', '#E15759', '#76B7B2', '#59A14F',
+            '#EDC948', '#B07AA1', '#FF9DA7', '#9C755F', '#BAB0AC'
+          ],
+          borderColor: 'white',
+          borderWidth: 2
+        }
+      ]
+    };
+  };
+
   return (
-    <div className="flex-container">
+    <div className="flex-container" style={{ paddingTop: '400px' }}>
       <Container>
         <Row className="mb-4">
           <Col>
@@ -78,6 +105,18 @@ function Home({ userId }) {
               <Card.Body>
                 <Card.Title>Invested Amount</Card.Title>
                 <Card.Text className="h3">{formatCurrency(totalAssets - availableFunds)}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
+            <Card className="portfolio-distribution-card">
+              <Card.Body>
+                <Card.Title>Portfolio Distribution</Card.Title>
+                <div style={{ width: '300px', height: '300px', margin: 'auto' }}>
+                  <Pie data={preparePieChartData()} options={pieChartOptions} />
+                </div>
               </Card.Body>
             </Card>
           </Col>
